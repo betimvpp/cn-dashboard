@@ -1,6 +1,10 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
+import { ThemeProvider } from '@/components/theme-provider'
+import { ModeToggle } from '@/components/toggle-button'
+import { cn } from '@/lib/utils'
+import SideNavbar from '@/components/side-navbar'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -16,7 +20,21 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={cn("min-h-screen w-full flex", inter.className,
+        { "debug-screens": process.env.NODE_ENV === "development" })}>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <SideNavbar />
+          <div className='p-8 w-full flex'>
+            <div className='w-full'>{children}</div>
+            <ModeToggle />
+          </div>
+        </ThemeProvider>
+      </body>
     </html>
   )
 }
